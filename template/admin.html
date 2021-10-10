@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/simplecss.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/ajax.js"></script>
+</head>
+<body>
+<div class="nav">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <a href="/admin">螺钉后台管理系统</a>
+                <a href="" class="btn btn-success" id="add-btn">添加用户</a>
+            </div>
+            <div class="col-md-2"><a href="/logout">退出系统</a></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered" id="table">
+                <tr>
+                    <th>客户编号</th>
+                    <th>姓名</th>
+                    <th>邮箱</th>
+                    <th>电话</th>
+                    <th>QQ</th>
+                    <th>操作</th>
+                </tr>
+                <!--<tr>-->
+                    <!--<td>1</td>-->
+                    <!--<td>张三</td>-->
+                    <!--<td>1@qq.com</td>-->
+                    <!--<td>135999888899</td>-->
+                    <!--<td>2014868983</td>-->
+                    <!--<td>-->
+                        <!--<a href="" class="btn btn-primary">修改</a>-->
+                        <!--<a href="" class="btn btn-danger">删除</a>-->
+                    <!--</td>-->
+                <!--</tr>-->
+            </table>
+        </div>
+    </div>
+</div>
+<!--添加用户panel-->
+<div class="panel panel-default" id="adduser">
+    <div class="panel-heading">
+        <div class="panel-title">添加用户</div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">姓名</div>
+            <div class="col-md-8"><input type="text" id="username"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">邮箱</div>
+            <div class="col-md-8"><input type="text" id="email"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">电话</div>
+            <div class="col-md-8"><input type="text" id="phone"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">QQ</div>
+            <div class="col-md-8"><input type="text" id="qq"></div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-primary" id="save-btn">保存</button>
+        <button class="btn btn-primary" id="cancel-btn">取消</button>
+    </div>
+</div>
+
+<!--编辑用户 panel-->
+<div class="panel panel-default" id="editUser">
+    <div class="panel-heading">
+        <div class="panel-title">编辑用户信息</div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">姓名</div>
+            <div class="col-md-8"><input type="text" id="edit-username"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">邮箱</div>
+            <div class="col-md-8"><input type="text" id="edit-email"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">电话</div>
+            <div class="col-md-8"><input type="text" id="edit-phone"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">QQ</div>
+            <div class="col-md-8">
+                <input type="text" id="edit-qq">
+                <input type="hidden" id="edit-id">
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-primary" id="edit-save-btn">保存</button>
+        <button class="btn btn-primary" id="edit-cancel-btn">取消</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var adduser=document.getElementById('adduser');
+    var add_btn=document.getElementById('add-btn');
+    var save_btn=document.getElementById('save-btn');
+    var cancel_btn=document.getElementById('cancel-btn');
+    var table=document.getElementById('table');
+    var edit_save_btn=document.getElementById('edit-save-btn');
+    var edit_cancel_btn=document.getElementById('edit-cancel-btn');
+    //-------------------------------------
+    var editUser=document.getElementById('editUser');
+    var edit_username=document.getElementById('edit-username');
+    var edit_email=document.getElementById('edit-email');
+    var edit_phone=document.getElementById('edit-phone');
+    var edit_qq=document.getElementById('edit-qq');
+    var edit_id=document.getElementById('edit-id');
+
+    Ajax_demo({
+        method:'get',
+        url:'/list',
+        u_login:'',
+        true_false:'true',
+        succes:function (data){
+            console.log(data);
+            if(data.status===0){
+                for(var i=0;i<data.message.length;i++){
+                    var otr=document.createElement('tr');
+                    for(item in data.message[i]){
+                        var otd=document.createElement('td');
+                        otd.innerText=data.message[i][item];
+                        otr.appendChild(otd);
+
+                    }
+                    var ood=document.createElement('td');
+                    ood.innerHTML='<button class="btn btn-primary">修改</button>'+'  '+
+                        '<button class="btn btn-danger">删除</button>';
+
+                table.appendChild(otr);
+                otr.appendChild(ood)
+                }
+            }else{
+                console.log("输入有错")
+            }
+
+        }
+
+
+    });
+    add_btn.onclick=function(){
+        adduser.style.display='block';
+        adduser.style.left=document.documentElement.clientWidth/2-adduser.offsetWidth/2+'px';
+        adduser.style.top=document.documentElement.clientHeight/2-adduser.offsetHeight/2+'px';
+        return false;
+    }
+    save_btn.onclick=function (){
+        var username=document.getElementById('username');
+        var email=document.getElementById('email');
+        var phone=document.getElementById('phone');
+        var qq=document.getElementById('qq');
+        Ajax_demo({
+            method:'post',
+            url:'/username',
+            u_login:'username='+username.value+'&email='+email.value+'&phone='+phone.value+'&qq='+qq.value,
+            true_false:'true',
+            succes:function (data){
+                    if(data.status===0){
+                        adduser.style.display='none';
+                        window.location.reload();
+                    }
+            }
+        })
+    }
+
+    cancel_btn.onclick=function (){
+        adduser.style.display='none';
+    }
+    //点击修改按钮，弹出对话框
+    table.onclick=function (ev){
+
+        var ev=ev||event;
+
+        if(ev.target.innerText=='修改'){
+            editUser.style.display='block';
+            editUser.style.left=document.documentElement.clientWidth/2-adduser.offsetWidth/2+'px';
+            editUser.style.top=document.documentElement.clientHeight/2-adduser.offsetHeight/2+'px';
+            var atd=ev.target.parentNode.parentNode.children;
+            edit_username.value=atd[1].innerText;
+            edit_email.value=atd[2].innerText;
+            edit_phone.value=atd[3].innerText;
+            edit_qq.value=atd[4].innerText;
+            edit_id.value=atd[0].innerText;
+
+        }
+        if (ev.target.innerText=='删除'){
+            var atd=ev.target.parentNode.parentNode.children;
+            Ajax_demo({
+                method:'post',
+                url:'/delete',
+                u_login:'edit_id='+atd[0].innerText,
+                true_false:true,
+                succes:function (data){
+                    if(data.status===0){
+                        window.location.reload();
+                    }else (
+                        alert("操作有问题")
+                    )
+                }
+            })
+        }
+        console.log(ev.target.innerText);
+    }
+    //修改后的数据发送到数据库并且保存
+    edit_save_btn.onclick=function (){
+        Ajax_demo({
+            method:'post',
+            url:'/save_x',
+            u_login:'edit_username='+edit_username.value+'&edit_email='+edit_email.value+'&edit_phone='+edit_phone.value+
+                '&edit_qq='+edit_qq.value+'&edit_id='+edit_id.value,
+            true_false:true,
+            succes:function (data){
+                if(data.status===0){
+                    editUser.style.display='none';
+                    window.location.reload();
+                }else{
+                    alert('warning');
+                }
+                console.log(data.message);
+
+            }
+
+        })
+    }
+
+</script>
+</body>
+</html>

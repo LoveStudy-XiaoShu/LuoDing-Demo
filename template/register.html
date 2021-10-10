@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/simplecss.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/js/ajax.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="login">
+            <div class="title">欢迎注册Nodeing会员</div>
+            <form action="">
+                <div class="content">
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label for="">用户名:</label>
+                        </div>
+                        <div class="col-md-8"><input type="text" id="username"></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label for="">密码:</label>
+                        </div>
+                        <div class="col-md-8"><input type="password" id="password"></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label for="">确认密码:</label>
+                        </div>
+                        <div class="col-md-8"><input type="password" id="repassword"></div>
+                    </div>
+                    <div class="row form-group btn-wrap">
+                        <button id="reg" type="button" class="btn btn-danger">注册</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var username=document.getElementById('username');
+        var password=document.getElementById('password');
+        var repassword=document.getElementById('repassword');
+        var reg=document.getElementById('reg');
+
+        reg.onclick=function (){
+            if(username.value===''||password.value===''){
+                alert('输入为空，请重新输入');
+            }else if(password.value !== repassword.value){
+                alert('输入错误，请重新输入');
+            }else
+            {
+                Ajax_demo({
+                    method:'post',
+                    url:'usename',
+                    u_login:'name='+username.value+"&"+"password="+password.value+"&"+"repassword="+repassword.value,
+                    true_false:true,
+                    succes:function (data){
+                        console.log(data);
+                        if(data.status===0){
+                            window.location.href='/login.html';
+                        }
+                        else if(data.status===1){
+                            alert(data.message);
+                        }
+                        console.log(data);
+                    }
+                });
+            }
+
+        }
+    </script>
+</body>
+</html>

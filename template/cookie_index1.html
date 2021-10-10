@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cookieindex1</title>
+    <script src="js/ajax.js"></script>
+</head>
+<body>
+<button id="tijiao">设置cookie</button>
+<button id="defalut">获取cookie</button>
+    <script>
+        var button=document.getElementsByTagName('button');
+        button[0].onclick=function (){
+            Ajax_demo({
+                method:'get',
+                url:'/setcookie',
+                u_login:'',
+                true_false:'true',
+                succes:function (result){
+
+                }
+            })
+        }
+        button[1].onclick=function (){
+            Ajax_demo({
+                method:'get',
+                url:'/getcookie',
+                u_login:'',
+                true_false:'true',
+                succes:function (result){
+                    console.log(result)
+                }
+            })
+        }
+    </script>
+</body>
+</html>
